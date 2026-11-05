@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffd66a">
+  <meta name="description" content="Composez un vin rouge et défiez un modèle de machine learning : cinq belles cuvées d'affilée !">
+  <title>La Cuvée Parfaite — Bistrot Pop, démo autonome</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* LA CUVEE PARFAITE — BISTROT POP — selected final direction
+   Montserrat / bold flat colors / poster-like outlines
+   Editable theme tokens live at the bottom of this file. */
+
+
+/* ===== BASE & COMPONENTS ===== */
+:root{color-scheme:light;--paper:#faf6ed;--cream:#fffdf7;--ink:#2b2022;--muted:#867b7a;--wine:#57233a;--wine-deep:#251722;--wine-soft:#7c3a4b;--line:#e9e0d5;--gold:#c79e68;--success:#487363;--fail:#b75b5e;--shadow:0 18px 55px rgba(58,36,37,.055)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,"Segoe UI",-apple-system,BlinkMacSystemFont,Arial,sans-serif;line-height:1.5}
+button,input{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid #d2a36d;outline-offset:3px}
+button:disabled{opacity:.55;cursor:not-allowed}
+.page-texture{position:fixed;pointer-events:none;inset:0;opacity:.16;z-index:-1;background-image:radial-gradient(#79533f 0.45px,transparent .45px);background-size:8px 8px}
+.site-wrap{max-width:1490px;margin:0 auto;padding:0 51px}
+.site-header{height:106px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e8ddcf}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--wine-deep)}
+.brand-emblem{height:48px;width:48px;display:grid;place-items:center;background:var(--wine);color:#f6dcb3;border-radius:50%;box-shadow:0 4px 0 rgba(86,35,58,.13)}
+.brand-emblem svg{height:32px;width:32px}
+.brand-type{display:flex;flex-direction:column;gap:0;letter-spacing:.165em;line-height:1.28;font-size:15px}
+.brand-type strong{font-size:17px;font-weight:800}
+.brand-type small{font-size:10px;font-weight:700;letter-spacing:.275em}
+.brand-type small span{color:#bb9e7f}
+.header-actions{display:flex;align-items:center;gap:27px}
+.mode-badge{display:inline-flex;align-items:center;gap:9px;text-transform:uppercase;color:#746049;font-size:10px;font-weight:850;letter-spacing:.13em}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#b8864c;box-shadow:0 0 0 4px rgba(201,159,108,.15)}
+.mode-badge.live{color:var(--success)}.mode-badge.live .status-dot{background:#54896f;box-shadow:0 0 0 4px rgba(75,133,100,.13)}
+.rules-button{display:inline-flex;gap:9px;align-items:center;justify-content:center;border:1px solid #ded1be;background:transparent;padding:11px 16px;border-radius:100px;color:#493e3b;font-size:12px;font-weight:750;transition:background .2s}
+.rules-button:hover{background:#f0e5d7}
+.hero{height:428px;position:relative;display:flex;overflow:hidden;align-items:center;background:var(--wine-deep);border-radius:10px;margin-top:24px;isolation:isolate}
+.hero:before{position:absolute;content:"";inset:0;background:radial-gradient(circle at 86% 47%,#623448 0,transparent 40%),linear-gradient(115deg,#261822 12%,#442331 100%);z-index:-3}
+.hero:after{content:"";position:absolute;right:0;bottom:0;width:55%;height:110%;background:repeating-radial-gradient(circle at 74% 54%,rgba(253,226,186,.055) 0 1px,transparent 1px 43px);z-index:-2}
+.hero-content{position:relative;z-index:3;padding:55px 5.1%;width:69%;color:#fbf3e7}
+.overline{display:flex;align-items:center;gap:12px;letter-spacing:.24em;font-size:11px;font-weight:750;color:#dfc39d;white-space:nowrap}
+.overline-line{width:34px;height:1px;background:#e0c29a}
+h1,h2,.probability-box strong{font-family:Georgia,"Times New Roman",serif;font-weight:400}
+h1{font-size:clamp(49px,5vw,78px);line-height:1.07;letter-spacing:-.04em;margin:20px 0 17px}
+h1 em{font-weight:400;color:#e2bb87}
+.hero-content>p{font-size:15px;color:#e7d9d8;max-width:548px;line-height:1.75;margin:0}
+.hero-content>p strong{color:#f2d0a4;font-weight:700}
+.hero-tags{display:flex;flex-wrap:wrap;gap:19px;margin-top:32px;font-size:11px;color:#e3d0cf;font-weight:650}
+.hero-tags span{display:inline-flex;gap:7px;align-items:center}
+.hero-tags svg{color:#cba879}
+.hero-illustration{position:absolute;inset:0 0 0 auto;width:45%;z-index:1;overflow:hidden}
+.hero-circle{position:absolute;border:1px solid rgba(246,223,194,.15);border-radius:50%}
+.hero-circle-one{width:380px;height:380px;top:40px;right:7px}
+.hero-circle-two{width:490px;height:490px;top:-16px;right:-46px}
+.hero-grape{position:absolute;color:#d6a17c;font-size:30px;opacity:.65}.grape-a{right:67px;top:78px}.grape-b{left:67px;bottom:75px;font-size:19px}
+.bottle-art{position:absolute;height:335px;width:155px;bottom:-7px;right:35%;filter:drop-shadow(17px 16px 18px rgba(0,0,0,.32));transform:rotate(-8deg)}
+.bottle-cap{position:absolute;width:50px;height:19px;background:linear-gradient(90deg,#21151b,#4d2c37 45%,#1a1218);top:0;left:52px;border-radius:3px 3px 1px 1px;z-index:4}
+.bottle-neck{position:absolute;width:43px;height:81px;top:15px;left:56px;background:linear-gradient(90deg,#170f19 0%,#432a35 27%,#20151e 70%,#100d14 100%);z-index:3}
+.bottle-shoulder{position:absolute;width:151px;height:80px;top:71px;left:2px;background:linear-gradient(90deg,#130f18 0%,#422937 28%,#2b1b26 67%,#130e15 100%);border-radius:51% 51% 10% 10% / 65% 65% 10% 10%;z-index:2}
+.bottle-body{position:absolute;width:151px;height:225px;top:108px;left:2px;border-radius:13px 13px 20px 20px;background:linear-gradient(90deg,#160f19 0%,#3b2533 23%,#3f2633 42%,#231822 77%,#120e17);z-index:3;overflow:hidden;box-shadow:inset -8px -1px 10px rgba(0,0,0,.4)}
+.bottle-shine{position:absolute;left:13px;top:9px;width:8px;height:192px;background:linear-gradient(rgba(255,255,255,.11),rgba(255,255,255,0));border-radius:12px}
+.bottle-label{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;position:absolute;top:55px;left:11px;width:129px;height:128px;background:#e9dbbd;color:#432132;box-shadow:0 3px 3px rgba(0,0,0,.22);border:5px solid #dbc8a7;outline:1px solid #ae866b;outline-offset:-11px}
+.bottle-label>span{font-size:8px;letter-spacing:.22em;font-weight:750}.bottle-label>strong{font-family:Georgia,serif;font-size:40px;font-weight:400;line-height:1.05;letter-spacing:-.045em}.bottle-label>i{font-family:Georgia,serif;font-size:11px}.bottle-label>span:last-child{font-size:6px}
+.hero-stamp{position:absolute;right:9%;bottom:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid #c69c6a;color:#e0c295;border-radius:50%;height:96px;width:96px;transform:rotate(12deg)}
+.hero-stamp span{font-size:9px;letter-spacing:.15em}.hero-stamp strong{font-family:Georgia,serif;font-size:34px;font-weight:400;line-height:1.1}
+.demo-note{display:flex;align-items:center;gap:13px;border:1px solid #e8d8c0;background:#fbefde;color:#7d5932;padding:13px 19px;border-radius:7px;font-size:12px;line-height:1.5;margin:18px 0 24px}
+.demo-note.live-note{border-color:#d9e7de;background:#eef7f0;color:#436d55}
+.demo-note-icon{font-size:20px}
+.game-layout{display:grid;grid-template-columns:minmax(0,1.74fr) minmax(340px,1fr);gap:29px;align-items:start;margin-top:28px;margin-bottom:55px}
+.laboratory{min-width:0}
+.section-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.section-kicker{margin:0;color:#877163;font-weight:800;letter-spacing:.19em;font-size:11px;text-transform:uppercase}
+.section-kicker span{color:var(--wine);font-weight:900}
+.section-heading h2{font-size:clamp(35px,3vw,48px);line-height:1.1;letter-spacing:-.035em;margin:12px 0 11px}
+.section-heading h2 em{color:var(--wine);font-weight:400}
+.draft-status{display:inline-flex;align-items:center;gap:7px;color:#7a6b5c;font-weight:800;font-size:10px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:17px;white-space:nowrap}
+.draft-status:before{content:"";height:7px;width:7px;border-radius:50%;background:#c59c68}
+.draft-status.changed:before{background:#cf8255}
+.intro-text{font-size:13px;color:#827773;line-height:1.75;max-width:610px;margin:1px 0 24px}
+.starter-strip{padding:17px 19px;background:#f2e9dc;border:1px solid #e9ddce;border-radius:9px;margin-bottom:23px}
+.starter-title{font-weight:850;font-size:12px;color:#553c3c;display:flex;gap:8px;align-items:center;margin-bottom:11px}
+.starter-spark{color:#ae7751;font-size:18px}
+.starter-actions{display:flex;flex-wrap:wrap;gap:7px}
+.recipe-button,.surprise-button{border:1px solid #ddcbb8;color:#65544d;background:#fffaf2;padding:8px 12px;font-size:11px;font-weight:750;border-radius:5px;transition:background .2s,border-color .2s}
+.recipe-button:hover,.surprise-button:hover{background:white;border-color:#ba9b7d}
+.recipe-button.active{background:#58253a;color:#fff6eb;border-color:#58253a}
+.surprise-button{display:flex;align-items:center;gap:7px;color:#54263c;margin-left:auto;background:transparent}
+.feature-groups{display:flex;flex-direction:column;gap:18px}
+.feature-group{border:1px solid var(--line);box-shadow:var(--shadow);background:var(--cream);border-radius:10px;overflow:hidden}
+.feature-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 21px;border-bottom:1px solid #f0e8de}
+.feature-title-group{display:flex;align-items:center;gap:12px}
+.group-icon{border-radius:10px;height:38px;width:38px;background:#f2e4de;display:flex;align-items:center;justify-content:center;font-size:19px;color:#733b49}
+.group-icon.green{background:#e6ebe2;color:#577865}.group-icon.gold{background:#f5ebd8;color:#ae7c40}
+.feature-heading h3{margin:0;font-size:14px;letter-spacing:-.015em}.feature-heading p{margin:2px 0 0;color:#988c86;font-size:11px}
+.group-count{font-size:10px;color:#9d8a80;background:#f7f2ea;border-radius:20px;padding:5px 9px;white-space:nowrap}
+.parameters-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.parameter{min-width:0;padding:19px 21px 17px;border-bottom:1px solid #f0e8de}
+.parameter:nth-child(odd){border-right:1px solid #f0e8de}
+.parameter:nth-last-child(-n+2){border-bottom:0}
+.parameter:last-child:nth-child(odd){border-right:0}
+.parameter-header{display:flex;align-items:flex-start;justify-content:space-between;gap:11px;min-height:45px}
+.parameter-name{display:block;font-weight:800;font-size:12px;line-height:1.45}
+.parameter-code{display:block;margin-top:1px;font-size:9px;color:#ad9c93;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere}
+.parameter-entry{position:relative;display:flex;align-items:center;gap:3px;border:1px solid #e9dacb;background:#fcf7ef;border-radius:5px;height:34px;min-width:91px;padding:0 7px}
+.parameter-entry:focus-within{border-color:#bd9a72}
+.parameter-entry input{width:67px;min-width:0;appearance:textfield;background:transparent;color:#542637;font-weight:850;font-size:12px;text-align:right;border:0;outline:0;padding:0}
+.parameter-entry input::-webkit-outer-spin-button,.parameter-entry input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.parameter-unit{color:#a49285;font-size:9px;white-space:nowrap}
+.parameter-range{appearance:none;width:100%;height:5px;margin:16px 0 10px;cursor:pointer;border-radius:30px;background:linear-gradient(90deg,#7d394e var(--fill,50%),#e9dfd4 var(--fill,50%));display:block}
+.parameter-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;height:15px;width:15px;background:#faf5e9;border:4px solid #79384c;border-radius:50%;box-shadow:0 1px 3px #917a7266}
+.parameter-range::-moz-range-thumb{height:8px;width:8px;background:#faf5e9;border:4px solid #79384c;border-radius:50%;box-shadow:0 1px 3px #917a7266}
+.parameter-bottom{display:flex;align-items:baseline;justify-content:space-between;gap:10px;color:#aea198;font-size:10px}
+.parameter-description{font-size:10px;margin-top:6px;color:#938782;line-height:1.45}
+.lab-action{display:flex;gap:18px;align-items:center;justify-content:space-between;background:#f2e8dd;border:1px solid #e9dccf;border-radius:9px;padding:22px 20px;margin-top:24px}
+.lab-action-copy{display:flex;align-items:center;gap:13px}.glass-spark{display:flex;align-items:center;justify-content:center;color:#a56e54;background:#fff8ed;border-radius:50%;font-size:27px;width:43px;height:43px;flex:none}
+.lab-action-copy strong{display:block;font-size:13px}.lab-action-copy small{display:block;color:#9d8a80;font-size:11px;margin-top:1px}
+.primary-button{border:1px solid #572238;background:#572238;color:#fff6e9;font-size:12px;font-weight:850;display:inline-flex;align-items:center;justify-content:center;gap:11px;min-height:53px;padding:13px 21px;border-radius:6px;box-shadow:0 9px 16px rgba(91,37,58,.12);white-space:nowrap;transition:background .2s,transform .2s}
+.primary-button:hover:not(:disabled){background:#6c2d47;transform:translateY(-1px)}
+.button-icon{font-size:20px;color:#ddaf80}.button-arrow{margin-left:5px;font-size:19px;font-weight:400}
+.primary-button.loading .button-icon{animation:spin 1.2s linear infinite}
+.sidebar{position:sticky;top:20px;min-width:0}
+.challenge-card{position:relative;overflow:hidden;background:#fffdf8;border:1px solid #e7dbce;border-radius:10px;box-shadow:0 22px 55px rgba(52,34,35,.065);padding:25px 25px 20px}
+.challenge-topline{display:flex;align-items:center;justify-content:space-between;gap:5px;font-size:10px;color:#8b766d;letter-spacing:.15em;font-weight:850}
+.challenge-diamond{font-size:21px;color:#ad7c5f}
+.challenge-card h2{font-family:Georgia,serif;font-size:clamp(31px,2.8vw,42px);line-height:1.08;letter-spacing:-.035em;margin:13px 0 11px}
+.challenge-card h2 em{color:var(--wine-soft);font-weight:400}
+.challenge-lead{font-size:12px;color:#8b7f79;line-height:1.7;margin:0 0 22px}
+.progress-overline{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#877a6d;letter-spacing:.08em;font-weight:800}
+.progress-overline strong{color:#51263b;font-size:12px;letter-spacing:0}
+.progress-circles{display:flex;gap:8px;margin:11px 0 24px}
+.progress-step{height:36px;flex:1;min-width:0;border:1px dashed #dbcab7;border-radius:5px;background:#fbf5ec;display:flex;justify-content:center;align-items:center;color:#ad9482;font-size:12px;font-weight:750;transition:background .2s,border-color .2s}
+.progress-step.done{color:#fff8ef;background:#60836e;border-color:#60836e;border-style:solid}
+.progress-step.next{border-color:#a16c63;color:#7e3d4a;background:#f8e9e5}
+.result-visual{position:relative;background:radial-gradient(circle at 50% 30%,#583144,#291d2a 72%);border-radius:7px;height:245px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.result-decor-circle{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);width:215px;height:215px;border:1px solid rgba(246,228,201,.18);border-radius:50%}.circle-two{width:285px;height:285px;border-color:rgba(246,228,201,.08)}
+.glass-illustration{position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:2;filter:drop-shadow(0 10px 10px rgba(0,0,0,.16))}
+#glass-wine{transition:y .6s ease,height .6s ease}
+.result-floating-label{position:absolute;top:18px;left:17px;color:#dfc6b2;font-size:10px;font-weight:750;letter-spacing:.15em}
+.probability-box{position:absolute;z-index:3;bottom:13px;right:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:99px;min-height:72px;border:1px solid rgba(255,245,222,.4);border-radius:5px;background:rgba(26,16,26,.82);color:#fff0da;padding:8px 12px}
+.probability-box strong{font-size:32px;line-height:1.1;letter-spacing:-.035em}.probability-box span{font-size:8px;line-height:1.4;color:#ebc9b4;text-align:center;text-transform:uppercase;letter-spacing:.09em}
+.verdict-block{display:flex;gap:13px;align-items:center;min-height:79px;padding:17px 0 16px;border-bottom:1px solid #eee4d9}
+.verdict-symbol{width:41px;height:41px;flex:none;display:flex;align-items:center;justify-content:center;font-size:23px;color:#b18862;background:#f7efdf;border-radius:50%}
+.verdict-block.good .verdict-symbol{background:#e4eee8;color:#3e775f}.verdict-block.bad .verdict-symbol{background:#f9e8e6;color:#a95357}
+.verdict-block strong{font-size:13px;display:block}.verdict-block p{color:#91837e;font-size:11px;line-height:1.45;margin:4px 0 0}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;padding:16px 0 18px;border-bottom:1px solid #eee4d9}
+.stats-grid>div+div{border-left:1px solid #ece3d7}.stats-grid strong{font-family:Georgia,serif;display:block;color:var(--wine);font-size:26px;font-weight:400;line-height:1.1}.stats-grid span{font-size:10px;color:#92827c}
+.history-block{padding:18px 0 7px}.history-heading{display:flex;align-items:center;justify-content:space-between;gap:5px;font-size:11px}.history-heading strong{font-size:12px}.history-heading span{color:#a39590;font-size:10px}
+.history-items{margin-top:12px;display:grid;gap:7px;min-height:35px}.empty-history{font-size:11px;color:#ac9b91;line-height:1.5;margin:0}
+.history-item{display:flex;align-items:center;gap:10px;background:#fbf6ee;border:1px solid #f1e9df;padding:9px 11px;border-radius:5px;font-size:11px}
+.history-icon{display:flex;align-items:center;justify-content:center;border-radius:50%;background:#e0ede4;color:#418164;width:21px;height:21px;flex:none;font-size:12px;font-weight:900}.history-item.bad .history-icon{background:#f5e2df;color:#b25560}
+.history-item .wine-name{flex:1;color:#6c5a54;font-weight:700}.history-item .wine-percent{color:#8e7f76}
+.reset-button{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;border:1px solid #e2d5c8;border-radius:5px;color:#795c59;background:#fffaf4;padding:11px 7px;font-size:11px;font-weight:750;margin-top:14px}
+.reset-button:hover{background:#f5ecdf}
+.insight-card{display:flex;align-items:flex-start;gap:11px;border:1px solid #e6dccf;background:#f1e9db;border-radius:8px;padding:17px;margin-top:14px}
+.insight-icon{background:#d7c3ab;color:#633b44;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;font-family:Georgia,serif;font-weight:700;font-style:italic;flex:none}.insight-card strong{font-size:11px}.insight-card p{font-size:10px;color:#8b7d76;line-height:1.6;margin:4px 0 0}
+.site-footer{display:flex;justify-content:space-between;gap:20px;align-items:center;border-top:1px solid #e5d8c8;padding:23px 0 37px;color:#978478;font-size:10px}.site-footer>span:first-child{font-weight:800;letter-spacing:.08em}.footer-dot{color:var(--wine);margin:0 3px}
+.rules-dialog{width:min(460px,calc(100% - 32px));border:1px solid #e4d2bd;border-radius:10px;background:#fffbf4;color:var(--ink);padding:28px 32px 32px;box-shadow:0 25px 90px #1e0e1e55}
+.rules-dialog::backdrop{background:rgba(29,15,23,.64);backdrop-filter:blur(4px)}.close-dialog{position:absolute;right:19px;top:13px;border:0;background:transparent;color:#765b5b;font-size:29px}.dialog-star{color:#bf986b;font-size:26px}.rules-dialog h2{font-size:42px;line-height:1.1;margin:10px 0 18px}.rules-dialog h2 em{color:var(--wine)}.rules-dialog ol{padding-left:20px;margin:0}.rules-dialog li{font-size:13px;line-height:1.65;padding-bottom:13px;color:#766660}.rules-dialog li strong{color:var(--ink)}.dialog-note{border-top:1px solid #ecdfcf;padding-top:16px;color:#99877f;font-size:11px;line-height:1.6}.dialog-cta{width:100%;margin-top:9px}
+.toast{position:fixed;z-index:60;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;background:#33202b;color:#fff5e9;border:1px solid #a98572;padding:12px 18px;border-radius:7px;font-size:12px;font-weight:650;box-shadow:0 16px 35px #321b2740;max-width:min(480px,calc(100% - 30px));text-align:center}
+.toast.active{opacity:1;transform:translateX(-50%) translateY(0)}
+.win-flash{animation:glow 1s ease 2}
+@keyframes glow{50%{box-shadow:0 0 0 5px rgba(120,166,129,.18),0 0 34px 8px rgba(120,166,129,.18)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (max-width:1150px){.site-wrap{padding:0 30px}.game-layout{grid-template-columns:minmax(0,1.35fr) minmax(320px,1fr);gap:22px}.hero-content{width:69%}.hero-illustration{width:41%}.hero-stamp{right:6%}.bottle-art{right:36%}.lab-action{align-items:stretch;flex-direction:column}.primary-button{width:100%}.surprise-button{margin-left:0}.parameter{padding:17px 13px}.parameter-entry{min-width:81px}.parameter-entry input{width:55px}}
+@media (max-width:900px){.site-wrap{padding:0 22px}.site-header{height:88px}.hero{height:388px}.hero-content{width:78%}.hero-illustration{width:44%;opacity:.65}.hero-content h1{font-size:clamp(43px,7vw,67px)}.game-layout{grid-template-columns:1fr}.sidebar{position:static}.challenge-card{max-width:none}.result-visual{height:235px}.insight-card{margin-top:13px}.lab-action{flex-direction:row;align-items:center}.primary-button{width:auto}}
+@media (max-width:620px){.site-wrap{padding:0 14px}.site-header{height:76px}.brand-emblem{width:39px;height:39px}.brand-emblem svg{width:28px;height:28px}.brand-type strong{font-size:13px}.brand-type small{font-size:8px}.header-actions{gap:11px}.mode-badge{font-size:9px}.rules-button{font-size:0;border-radius:50%;padding:10px}.rules-button svg{width:19px;height:19px}.hero{height:auto;min-height:380px;margin-top:14px;align-items:flex-start}.hero-content{width:100%;padding:34px 27px 126px}.overline{font-size:9px;white-space:normal}.overline-line{width:22px;flex:none}.hero-content h1{font-size:48px;line-height:1.08;margin:18px 0 14px}.hero-content>p{font-size:12px;max-width:315px;line-height:1.65}.hero-tags{gap:11px 15px;font-size:9px;margin-top:21px;max-width:310px}.hero-tags svg{width:14px;height:14px}.hero-illustration{opacity:.3;width:80%;right:-105px;transform:scale(.83);transform-origin:bottom right}.hero-stamp{display:none}.demo-note{padding:11px 13px;font-size:11px;align-items:flex-start;margin-top:12px}.game-layout{margin-top:25px;gap:25px}.section-heading h2{font-size:39px}.draft-status{font-size:9px}.intro-text{font-size:12px;margin-bottom:17px}.feature-heading{padding:15px}.parameters-grid{grid-template-columns:1fr}.parameter{border-right:0!important;border-bottom:1px solid #f0e8de!important;padding:16px 17px}.parameter:last-child{border-bottom:0!important}.parameter-header{min-height:42px}.starter-strip{padding:15px}.lab-action{flex-direction:column;align-items:stretch}.lab-action-copy small{font-size:10px}.challenge-card{padding:20px}.challenge-card h2{font-size:38px}.site-footer{flex-direction:column;align-items:flex-start;font-size:9px;padding-bottom:22px}}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+
+/* ===== STRUCTURE & TYPOGRAPHY REWORK ===== */
+/* LA CUVEE PARFAITE - Design refresh / common foundations
+   Load after styles.css and before ONE visual theme.
+   No decorative gradients: strong flat colors and Montserrat-style geometry.
+*/
+:root {
+  --ui-font:'Montserrat','Avenir Next','Century Gothic','Trebuchet MS',Arial,sans-serif;
+  --bg:#f7f3ec;--surface:#fffdfa;--surface-alt:#f0e6dc;
+  --ink:#242026;--muted:#605a5a;--border:#d8cbc5;
+  --accent:#72263e;--accent-hover:#541b32;--accent-ink:#fffaf0;
+  --accent-2:#eebf6c;--accent-2-ink:#2a2022;
+  --hero-bg:#64243c;--hero-text:#fff9f1;--hero-subtext:#f6e7dc;
+  --hero-highlight:#edc26f;--hero-border:transparent;
+  --result-bg:#431d2c;--result-text:#fff8f0;
+  --bottle:#30212a;--bottle-edge:#1c1821;--bottle-label:#f7e7bd;
+  --success:#26704b;--fail:#a93549;
+  --radius:10px;--radius-sm:6px;--radius-lg:14px;
+  --border-width:1px;--shadow-card:none;--shadow-button:none;
+  --slider-bg:#e3d8ce;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);font-family:var(--ui-font);color:var(--ink);line-height:1.55;font-size:14px;font-weight:500}
+button,input{font-family:inherit}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent-2);outline-offset:3px}
+.page-texture{display:none}
+.site-wrap{max-width:1435px;padding:0 38px}
+.site-header{height:94px;border-bottom:1px solid var(--border)}
+.brand{color:var(--ink);gap:12px}
+.brand-emblem{background:var(--accent);color:var(--accent-ink);box-shadow:none;border-radius:var(--radius-sm)}
+.brand-type{letter-spacing:.055em;line-height:1.3}
+.brand-type strong{font-size:18px;letter-spacing:-.035em;font-weight:900}
+.brand-type small{font-size:10px;letter-spacing:.125em;font-weight:700;color:var(--muted)}
+.brand-type small span{color:var(--accent)}
+.mode-badge{color:var(--muted);font-size:11px;letter-spacing:.015em;text-transform:none;font-weight:700}
+.mode-badge.live{color:var(--success)}
+.status-dot{background:var(--accent-2);box-shadow:none;width:9px;height:9px}
+.mode-badge.live .status-dot{background:var(--success);box-shadow:none}
+.header-actions{gap:17px}
+.rules-button{font-size:12px;font-weight:750;border:var(--border-width) solid var(--border);background:var(--surface);color:var(--ink);border-radius:var(--radius-sm);padding:11px 15px}
+.rules-button:hover{background:var(--surface-alt)}
+h1,h2,h3,.probability-box strong{font-family:var(--ui-font);font-weight:850;font-style:normal}
+h1 em,h2 em,.challenge-card h2 em,.rules-dialog h2 em{font-family:inherit;font-weight:900;font-style:normal}
+.hero{height:410px;background:var(--hero-bg);border:var(--border-width) solid var(--hero-border);border-radius:var(--radius-lg);margin-top:21px;align-items:center;box-shadow:none}
+.hero:before,.hero:after{display:none}
+.hero-content{padding:47px 5%;width:72%;color:var(--hero-text)}
+.overline{font-size:12px;color:var(--hero-highlight);letter-spacing:.075em;font-weight:850}
+.overline-line{background:var(--hero-highlight);height:3px;width:25px}
+.hero h1{font-size:clamp(48px,5.5vw,80px);line-height:1.02;letter-spacing:-.07em;margin:18px 0 23px;max-width:770px}
+.hero h1 em{color:var(--hero-highlight)}
+.hero-content>p{font-size:16px;max-width:580px;color:var(--hero-subtext);line-height:1.65}
+.hero-content>p strong{color:var(--hero-highlight);font-weight:850}
+.hero-tags{gap:10px;margin-top:24px;font-size:11px;color:var(--hero-text);font-weight:700}
+.hero-tags span{border:1px solid color-mix(in srgb,var(--hero-text) 36%,transparent);border-radius:var(--radius-sm);padding:6px 9px;background:transparent}
+.hero-tags svg{color:var(--hero-highlight)}
+.hero-illustration{width:44%;opacity:1}
+.hero-circle{border-color:color-mix(in srgb,var(--hero-text) 24%,transparent)}
+.hero-grape{color:var(--hero-highlight);opacity:1}
+.bottle-art{filter:none;transform:rotate(-9deg);right:31%}
+.bottle-cap,.bottle-neck,.bottle-shoulder,.bottle-body{background:var(--bottle)}
+.bottle-shoulder{border:3px solid var(--bottle-edge);border-bottom:0}
+.bottle-body{border:3px solid var(--bottle-edge);box-shadow:none}
+.bottle-shine{background:color-mix(in srgb,var(--hero-text) 15%,transparent);height:195px;width:5px;opacity:.55}
+.bottle-label{background:var(--bottle-label);color:var(--ink);box-shadow:none;border:4px solid var(--bottle-label);outline:1px solid var(--accent);outline-offset:-9px}
+.bottle-label>strong,.bottle-label>i{font-family:var(--ui-font);font-weight:900;font-style:normal}
+.bottle-label>strong{font-size:38px;letter-spacing:-.07em}
+.hero-stamp{border:2px solid var(--hero-highlight);color:var(--hero-highlight)}
+.hero-stamp strong{font-family:var(--ui-font);font-weight:900}
+.demo-note{background:var(--surface-alt);color:var(--ink);border:var(--border-width) solid var(--border);border-radius:var(--radius-sm);font-size:12px;line-height:1.6;padding:12px 17px;margin:15px 0 24px}
+.demo-note.live-note{background:var(--surface-alt);color:var(--ink);border-color:var(--success)}
+.demo-note-icon{color:var(--accent);font-size:17px}
+.game-layout{gap:25px;grid-template-columns:minmax(0,1.68fr) minmax(350px,1fr);margin-top:29px;margin-bottom:45px}
+.section-kicker{font-size:12px;font-weight:900;color:var(--muted);letter-spacing:.055em}
+.section-kicker span{color:var(--accent)}
+.section-heading h2{font-size:clamp(32px,3vw,46px);letter-spacing:-.06em;margin:9px 0 8px}
+.section-heading h2 em{color:var(--accent)}
+.intro-text{font-size:14px;color:var(--muted);line-height:1.7;max-width:660px;margin:3px 0 21px}
+.draft-status{font-size:11px;letter-spacing:0;text-transform:none;color:var(--muted);font-weight:700}
+.draft-status:before{background:var(--accent-2)}
+.draft-status.changed:before{background:var(--accent)}
+.starter-strip{background:var(--surface-alt);border:var(--border-width) solid var(--border);border-radius:var(--radius);padding:17px 19px;margin-bottom:21px}
+.starter-title{font-size:13px;color:var(--ink);margin-bottom:11px}
+.starter-spark{color:var(--accent);font-size:18px}
+.recipe-button,.surprise-button{background:var(--surface);color:var(--ink);border:var(--border-width) solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-weight:750;padding:8px 11px}
+.recipe-button:hover,.surprise-button:hover{background:var(--surface);border-color:var(--accent)}
+.recipe-button.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.surprise-button{color:var(--accent);background:var(--surface)}
+.feature-groups{gap:17px}
+.feature-group{background:var(--surface);border:var(--border-width) solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-card)}
+.feature-heading{padding:18px 21px;border-bottom:1px solid var(--border)}
+.feature-heading h3{font-size:15px;font-weight:900;letter-spacing:-.035em}
+.feature-heading p{font-size:12px;color:var(--muted)}
+.group-icon,.group-icon.green,.group-icon.gold{background:var(--surface-alt);color:var(--accent);border-radius:var(--radius-sm);height:42px;width:42px;font-size:21px}
+.group-count{background:var(--surface-alt);color:var(--muted);border-radius:var(--radius-sm);font-size:11px;padding:6px 9px;font-weight:650}
+.parameter{padding:18px 21px 16px;border-bottom:1px solid var(--border)}
+.parameter:nth-child(odd){border-right:1px solid var(--border)}
+.parameter-name{font-size:13px;font-weight:800}
+.parameter-code{font-size:10px;color:var(--muted)}
+.parameter-entry{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);height:36px;padding:0 7px}
+.parameter-entry:focus-within{border-color:var(--accent)}
+.parameter-entry input{font-size:13px;color:var(--ink);font-weight:800}
+.parameter-unit{font-size:10px;color:var(--muted)}
+.parameter-range{height:6px;border-radius:12px;background:linear-gradient(90deg,var(--accent) var(--fill,50%),var(--slider-bg) var(--fill,50%))}
+.parameter-range::-webkit-slider-thumb{height:17px;width:17px;background:var(--surface);border:4px solid var(--accent);border-radius:50%;box-shadow:none}
+.parameter-range::-moz-range-thumb{height:9px;width:9px;background:var(--surface);border:4px solid var(--accent);border-radius:50%;box-shadow:none}
+.parameter-bottom{font-size:11px;color:var(--muted)}
+.parameter-description{font-size:11px;color:var(--muted)}
+.lab-action{background:var(--surface-alt);border:var(--border-width) solid var(--border);border-radius:var(--radius);padding:19px 20px;margin-top:20px}
+.glass-spark{background:var(--surface);color:var(--accent);border-radius:var(--radius-sm)}
+.lab-action-copy strong{font-size:14px}.lab-action-copy small{font-size:12px;color:var(--muted)}
+.primary-button{background:var(--accent);color:var(--accent-ink);border:var(--border-width) solid var(--accent);border-radius:var(--radius-sm);font-size:13px;font-weight:850;box-shadow:var(--shadow-button);padding:13px 21px;min-height:56px}
+.primary-button:hover:not(:disabled){background:var(--accent-hover);border-color:var(--accent-hover);transform:translateY(-1px)}
+.button-icon{color:var(--accent-ink);font-size:19px}
+.sidebar{top:20px}
+.challenge-card{background:var(--surface);border:var(--border-width) solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-card);padding:25px}
+.challenge-topline{color:var(--muted);font-size:11px;letter-spacing:.045em}
+.challenge-diamond{color:var(--accent);font-size:19px}
+.challenge-card h2{font-family:var(--ui-font);font-size:clamp(29px,2.7vw,38px);font-weight:900;letter-spacing:-.06em;line-height:1.09;margin:13px 0 12px}
+.challenge-card h2 em{color:var(--accent)}
+.challenge-lead{font-size:13px;color:var(--muted);line-height:1.65}
+.progress-overline{font-size:11px;color:var(--muted);letter-spacing:.025em}
+.progress-overline strong{font-size:12px;color:var(--accent)}
+.progress-step{background:var(--bg);color:var(--muted);border:1px solid var(--border);border-radius:var(--radius-sm);height:39px;font-size:13px}
+.progress-step.done{background:var(--success);color:#fff;border-color:var(--success)}
+.progress-step.next{background:var(--surface-alt);border-color:var(--accent);color:var(--accent)}
+.result-visual{background:var(--result-bg);border-radius:var(--radius-sm);height:235px}
+.result-decor-circle{border-color:color-mix(in srgb,var(--result-text) 20%,transparent)}.circle-two{border-color:color-mix(in srgb,var(--result-text) 12%,transparent)}
+#glass-wine{fill:var(--accent)}
+.glass-illustration{filter:none}
+.result-floating-label{color:var(--result-text);font-size:11px;font-weight:750;letter-spacing:.07em}
+.probability-box{background:var(--surface);color:var(--ink);border:2px solid var(--surface);border-radius:var(--radius-sm);min-width:105px;min-height:78px}
+.probability-box strong{font-size:30px;color:var(--accent);font-weight:900}
+.probability-box span{font-size:9px;color:var(--muted);letter-spacing:.02em;font-weight:750}
+.verdict-block{border-bottom:1px solid var(--border)}
+.verdict-symbol{background:var(--surface-alt);color:var(--accent);border-radius:var(--radius-sm)}
+.verdict-block.good .verdict-symbol{background:var(--success);color:#fff}
+.verdict-block.bad .verdict-symbol{background:var(--fail);color:#fff}
+.verdict-block strong{font-size:13px}
+.verdict-block p{font-size:12px;color:var(--muted)}
+.stats-grid{border-bottom:1px solid var(--border)}
+.stats-grid>div+div{border-left:1px solid var(--border)}
+.stats-grid strong{font-family:var(--ui-font);font-size:28px;font-weight:900;color:var(--accent)}
+.stats-grid span{font-size:11px;color:var(--muted)}
+.history-heading{font-size:12px}.history-heading strong{font-size:12px}.history-heading span{color:var(--muted);font-size:11px}
+.empty-history{font-size:12px;color:var(--muted)}
+.history-item{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px}
+.history-icon{border-radius:var(--radius-sm);background:var(--success);color:#fff}
+.history-item.bad .history-icon{background:var(--fail);color:#fff}
+.history-item .wine-name{color:var(--ink)}.history-item .wine-percent{color:var(--muted)}
+.reset-button{background:var(--surface);color:var(--ink);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px}
+.reset-button:hover{background:var(--surface-alt)}
+.insight-card{background:var(--surface-alt);border:var(--border-width) solid var(--border);border-radius:var(--radius);padding:17px}
+.insight-icon{background:var(--accent);color:var(--accent-ink);font-family:var(--ui-font);border-radius:var(--radius-sm);font-style:normal}
+.insight-card strong{font-size:12px}.insight-card p{font-size:11px;color:var(--muted)}
+.site-footer{border-color:var(--border);color:var(--muted);font-size:11px}
+.footer-dot{color:var(--accent)}
+.rules-dialog{background:var(--surface);color:var(--ink);border:var(--border-width) solid var(--border);border-radius:var(--radius-lg)}
+.rules-dialog::backdrop{background:#141115b9;backdrop-filter:none}
+.close-dialog{color:var(--ink)}
+.dialog-star{color:var(--accent)}
+.rules-dialog h2 em{color:var(--accent)}
+.rules-dialog li{color:var(--muted);font-size:13px}
+.dialog-note{border-top:1px solid var(--border);color:var(--muted)}
+.toast{background:var(--ink);color:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);box-shadow:none}
+@media (max-width:1150px){.site-wrap{padding:0 24px}.game-layout{grid-template-columns:minmax(0,1.35fr) minmax(320px,1fr)}.parameter{padding:17px 13px}.hero h1{font-size:clamp(48px,5.1vw,71px)}.hero-content{width:75%}}
+@media (max-width:900px){.game-layout{grid-template-columns:1fr}.hero-content{width:79%}.hero-illustration{width:44%}}
+@media (max-width:620px){.site-wrap{padding:0 14px}.site-header{height:76px}.brand-type strong{font-size:14px}.brand-type small{font-size:8px}.rules-button{font-size:0;padding:10px}.hero{height:auto;min-height:382px}.hero-content{width:100%;padding:33px 24px 118px}.hero h1{font-size:47px}.hero-content>p{font-size:13px;line-height:1.55}.hero-tags{gap:7px}.hero-tags span{padding:5px 7px;font-size:9px}.hero-illustration{opacity:.24}.parameter{border-right:0!important;border-bottom:1px solid var(--border)!important}.parameter:last-child{border-bottom:0!important}.challenge-card{padding:19px}.challenge-card h2{font-size:35px}.section-heading h2{font-size:36px}.lab-action{padding:17px}}
+
+
+/* ===== BISTROT POP FINAL ART DIRECTION ===== */
+/* 02 — BISTROT POP: solaire, joueur, presque affiche imprimee. */
+:root {
+  --bg:#fff9e9;--surface:#fffdf5;--surface-alt:#ffe3b6;
+  --ink:#1f2428;--muted:#484c50;--border:#20262a;
+  --accent:#df4837;--accent-hover:#b63129;--accent-ink:#fffef5;
+  --accent-2:#ffe08b;--accent-2-ink:#1f2428;
+  --hero-bg:#ffd66a;--hero-text:#22272b;--hero-subtext:#393b3a;
+  --hero-highlight:#c8372b;--hero-border:#23272b;
+  --result-bg:#284c58;--result-text:#fff6e6;
+  --bottle:#263a34;--bottle-edge:#172923;--bottle-label:#ffe19a;
+  --success:#227d60;--fail:#c83d3b;
+  --radius:17px;--radius-sm:11px;--radius-lg:20px;
+  --border-width:2px;--shadow-card:5px 5px 0 #20262a;--shadow-button:4px 4px 0 #20262a;
+  --slider-bg:#f3dabb;
+}
+body{font-weight:550}
+.site-header{border-bottom:3px solid var(--ink)}
+.brand-emblem{border-radius:50%;transform:rotate(-9deg)}
+.hero{border:3px solid var(--ink);transform:none}
+.hero-content{width:72%}
+.hero h1{font-weight:950;letter-spacing:-.08em}
+.hero h1 em{color:#d14232;text-decoration:underline;text-decoration-thickness:5px;text-underline-offset:7px}
+.hero-tags span{background:#fff8e3;border:2px solid #252a2b;border-radius:999px}
+.hero-tags svg{color:#c83e32}
+.hero-circle{border:3px solid #23272b33}
+.hero-grape{color:#e54f3e}
+.bottle-art{transform:rotate(8deg)}
+.hero-stamp{background:#ed5441;color:#fff8e9;border:3px solid #242627;transform:rotate(-14deg)}
+.demo-note{border-left:7px solid var(--accent)}
+.starter-strip,.lab-action{border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.starter-title{font-size:14px}
+.recipe-button,.surprise-button{border:2px solid var(--ink);font-weight:800}
+.recipe-button:hover,.surprise-button:hover{background:#fff4da}
+.recipe-button.active{border-color:var(--ink)}
+.feature-group{border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink)}
+.feature-heading{border-bottom:2px solid var(--ink)}
+.group-count{background:#ffe3b6;color:var(--ink);border:1px solid var(--ink)}
+.group-icon,.group-icon.green,.group-icon.gold{background:#ffdc7d;border:2px solid var(--ink);border-radius:12px;color:var(--ink)}
+.parameter:nth-child(odd),.parameter{border-color:#cfc6ae}
+.parameter-entry{border:2px solid var(--ink);background:#fffdf7}
+.parameter-range::-webkit-slider-thumb{border:4px solid var(--ink);background:var(--accent-2)}
+.parameter-range::-moz-range-thumb{border:4px solid var(--ink);background:var(--accent-2)}
+.lab-action-copy .glass-spark{border:2px solid var(--ink);background:#ffda7b}
+.primary-button{border:2px solid var(--ink);font-weight:900;letter-spacing:-.02em;box-shadow:4px 4px 0 var(--ink)}
+.primary-button:hover:not(:disabled){box-shadow:2px 2px 0 var(--ink);transform:translate(2px,2px)}
+.challenge-card{border:2px solid var(--ink);box-shadow:6px 6px 0 var(--ink)}
+.challenge-card h2 em{color:#da4638}
+.challenge-diamond{color:#de4e3e}
+.progress-step{border:2px solid var(--ink);border-radius:13px;background:#fff9e9;font-size:16px}
+.progress-step.next{background:#ffe19b}
+.progress-step.done{border-color:var(--ink)}
+.result-visual{border:2px solid var(--ink);border-radius:14px}
+.probability-box{border:2px solid var(--ink);border-radius:14px;box-shadow:3px 3px 0 var(--ink)}
+.stats-grid strong{font-size:32px}
+.insight-card{border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.history-item{border:1px solid var(--ink)}
+.rules-dialog{border:3px solid var(--ink);box-shadow:9px 9px 0 var(--accent)}
+@media(max-width:620px){.hero{border-width:2px}.hero h1{font-size:44px}.feature-group{box-shadow:3px 3px 0 var(--ink)}.challenge-card{box-shadow:3px 3px 0 var(--ink)}.lab-action{box-shadow:3px 3px 0 var(--ink)}}
+
+
+/* ===== FINAL FINISHES: FLAT COLOR / ACCESSIBILITY ===== */
+.result-visual{background:#284c58}
+.result-decor-circle{opacity:.5}
+.bottle-shine{background:#ffffff33}
+.primary-button:active:not(:disabled){box-shadow:1px 1px 0 var(--ink);transform:translate(3px,3px)}
+.recipe-button.active:hover{background:var(--accent-hover);color:var(--accent-ink);border-color:var(--ink)}
+.recipe-button:active,.surprise-button:active{transform:translateY(1px)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+</style>
+</head>
+<body>
+
+  <div class="page-texture" aria-hidden="true"></div>
+  <div class="site-wrap">
+    <header class="site-header">
+      <a class="brand" href="#accueil" aria-label="La Cuvée Parfaite, accueil">
+        <span class="brand-emblem" aria-hidden="true">
+          <svg viewBox="0 0 44 44" fill="none"><path d="M24.5 7c-.5 4.3-2.9 7.1-6.2 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M25.2 8c2.4-3.2 5.7-4.2 9-3.2-1.4 3.8-4.4 6.1-9 6.2" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><g fill="currentColor"><circle cx="19" cy="17" r="4"/><circle cx="28" cy="17" r="4"/><circle cx="14" cy="24.5" r="4"/><circle cx="23" cy="24.5" r="4"/><circle cx="32" cy="24.5" r="4"/><circle cx="19" cy="32" r="4"/><circle cx="28" cy="32" r="4"/><circle cx="23.5" cy="38.5" r="3.4"/></g></svg>
+        </span>
+        <span class="brand-type"><strong>LA CUVÉE</strong><small>PARFAITE <span>·</span> 2026</small></span>
+      </a>
+      <div class="header-actions">
+        <span id="mode-badge" class="mode-badge demo"><span class="status-dot"></span><span id="mode-label">Mode découverte</span></span>
+        <button id="rules-button" class="rules-button" type="button">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9.4a2.5 2.5 0 1 1 4.4 1.5c-.8.8-2.2 1.3-2.2 2.8"/><path d="M12 17h.01"/></svg>
+          Comment jouer ?
+        </button>
+      </div>
+    </header>
+
+    <main id="accueil">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-content">
+          <div class="overline"><span class="overline-line"></span> LE DÉFI DES BELLES BOUTEILLES</div>
+          <h1 id="hero-title">À la recherche<br>du <em>grand cru.</em></h1>
+          <p>Onze paramètres. Une IA pour te départager. Ton objectif : réussir <strong>5 bons vins d'affilée</strong>, sans laisser passer une mauvaise bouteille.</p>
+          <div class="hero-tags" aria-label="Informations sur le défi">
+            <span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v4m0 10v4M3 12h4m10 0h4M5.7 5.7l2.9 2.9m6.8 6.8 2.9 2.9m0-12.6-2.9 2.9M8.6 15.4l-2.9 2.9"/></svg> 11 caractéristiques</span>
+            <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 14.5V5h16v9.5M7 19h10m-5-4v4m-7-8h14"/></svg> IA &amp; machine learning</span>
+            <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.8 6 6.6.8-4.9 4.5 1.3 6.4-5.8-3.2-5.8 3.2 1.3-6.4-4.9-4.5 6.6-.8L12 3Z"/></svg> Qualité ≥ 7 / 10</span>
+          </div>
+        </div>
+        <div class="hero-illustration" aria-hidden="true">
+          <div class="hero-circle hero-circle-one"></div><div class="hero-circle hero-circle-two"></div>
+          <span class="hero-grape grape-a">✳</span><span class="hero-grape grape-b">✳</span>
+          <div class="bottle-art">
+            <div class="bottle-cap"></div><div class="bottle-neck"></div><div class="bottle-shoulder"></div><div class="bottle-body">
+              <div class="bottle-shine"></div>
+              <div class="bottle-label"><span>MAISON</span><strong>7/10</strong><i>GRAND CRU</i><span>ÉDITION IA</span></div>
+            </div>
+          </div>
+          <div class="hero-stamp"><span>LE DÉFI</span><strong>05</strong><span>CUVÉES</span></div>
+        </div>
+      </section>
+
+      <div id="demo-note" class="demo-note" role="status">
+        <span class="demo-note-icon">✦</span><span id="demo-note-text">Mode démonstration : le verdict est calculé localement pour découvrir le jeu. Il ne provient pas encore de ton endpoint Azure.</span>
+      </div>
+
+      <section class="game-layout" aria-label="Atelier de création et défi">
+        <div class="laboratory">
+          <div class="section-heading">
+            <div><p class="section-kicker"><span>01</span> / LE LABORATOIRE</p><h2>Compose ta <em>cuvée</em></h2></div>
+            <span id="draft-status" class="draft-status">Prête à déguster</span>
+          </div>
+          <p class="intro-text">Ajuste les propriétés chimiques de ton vin rouge. Chaque choix influence la prédiction de l'IA : à toi de trouver la bonne formule.</p>
+
+          <div class="starter-strip">
+            <div class="starter-title"><span class="starter-spark">✦</span> Besoin d'inspiration ?</div>
+            <div class="starter-actions">
+              <button type="button" class="recipe-button" data-recipe="0">Départ équilibré</button>
+              <button type="button" class="recipe-button" data-recipe="1">Cuvée légère</button>
+              <button type="button" class="recipe-button" data-recipe="2">Cuvée intense</button>
+              <button type="button" class="surprise-button" id="randomize-button" title="Charger un vin réel choisi au hasard">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 7 3 0 10 10h3m-3-3 3 3-3 3M4 17h3L17 7h3m-3-3 3 3-3 3"/></svg>
+                Surprise
+              </button>
+            </div>
+          </div>
+
+          <div id="feature-groups" class="feature-groups" aria-label="Réglage des 11 variables du modèle"></div>
+
+          <div class="lab-action">
+            <div class="lab-action-copy"><span class="glass-spark">✷</span><div><strong>Ta recette est prête ?</strong><small>Une dégustation = une tentative dans le défi.</small></div></div>
+            <button type="button" id="predict-button" class="primary-button"><span class="button-icon">✦</span><span id="predict-button-label">Faire déguster à l'IA</span><span class="button-arrow" aria-hidden="true">↗</span></button>
+          </div>
+        </div>
+
+        <aside class="sidebar" aria-label="Résultats du défi">
+          <div class="challenge-card">
+            <div class="challenge-topline"><span>02 / LE DÉFI DU SOMMELIER</span><span class="challenge-diamond">✥</span></div>
+            <h2>Cinq grands crus.<br><em>Sans faux pas.</em></h2>
+            <p class="challenge-lead">Enchaîne 5 vins validés par le modèle. Un échec et la série repart à zéro.</p>
+            <div class="progress-overline"><span>TA SÉRIE EN COURS</span><strong id="progress-label">0 / 5</strong></div>
+            <div class="progress-circles" id="progress-circles" role="group" aria-label="Progression vers cinq réussites"></div>
+            <div class="result-visual" id="result-visual">
+              <div class="result-decor-circle circle-one"></div><div class="result-decor-circle circle-two"></div>
+              <div class="glass-illustration" aria-hidden="true">
+                <svg viewBox="0 0 140 185" width="140" height="185" role="presentation">
+                  <defs><clipPath id="glass-bowl"><path d="M27 17h86l-5.5 65c-2.2 24-15.4 37.3-37.5 37.3S35.7 106 33.5 82Z"/></clipPath></defs>
+                  <rect id="glass-wine" x="27" y="90" width="86" height="40" fill="#a9364b" clip-path="url(#glass-bowl)" opacity=".96"/>
+                  <path d="M27 17h86l-5.5 65c-2.2 24-15.4 37.3-37.5 37.3S35.7 106 33.5 82Z" fill="none" stroke="#e3c7a7" stroke-width="3" stroke-linejoin="round"/>
+                  <path d="M38 28h8l3 45" stroke="#fff7e7" stroke-width="3" opacity=".45" stroke-linecap="round"/>
+                  <path d="M70 120v45m-26 4h52M52 169l18-4 18 4" fill="none" stroke="#e3c7a7" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="result-floating-label">LE VERDICT</span>
+              <div class="probability-box"><strong id="probability-value">—</strong><span id="probability-label">En attente</span></div>
+            </div>
+            <div class="verdict-block" id="verdict-block" aria-live="polite"><div class="verdict-symbol" id="verdict-symbol">✧</div><div><strong id="verdict-title">Le jury attend ta cuvée</strong><p id="verdict-text">Ajuste les paramètres, puis lance ta première dégustation.</p></div></div>
+            <div class="stats-grid"><div><strong id="stat-attempts">0</strong><span>Essais</span></div><div><strong id="stat-streak">0</strong><span>Série actuelle</span></div><div><strong id="stat-best">0</strong><span>Record</span></div></div>
+            <div class="history-block"><div class="history-heading"><strong>Journal des dégustations</strong><span id="history-count">0 vin</span></div><div id="history-items" class="history-items"><p class="empty-history">Les premières notes de dégustation apparaîtront ici.</p></div></div>
+            <button id="reset-button" class="reset-button" type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8m0-5v5h5"/></svg> Réinitialiser le défi</button>
+          </div>
+          <div class="insight-card"><span class="insight-icon">i</span><div><strong>Comment lire le résultat ?</strong><p>Le modèle prédit la catégorie <b>bon_vin</b> (qualité initiale ≥ 7/10). Le pourcentage représente la probabilité estimée de cette catégorie, pas une note sur 100.</p></div></div>
+        </aside>
+      </section>
+    </main>
+    <footer class="site-footer"><span>LA CUVÉE PARFAITE <span class="footer-dot">✦</span> UN DÉFI MACHINE LEARNING</span><span>Données : vins rouges • Une expérience pédagogique, pas une expertise œnologique.</span></footer>
+  </div>
+
+  <dialog id="rules-dialog" class="rules-dialog" aria-labelledby="rules-title">
+    <form method="dialog"><button class="close-dialog" aria-label="Fermer les règles" type="submit">×</button></form>
+    <span class="dialog-star">✦</span><p class="section-kicker">LES RÈGLES DU JEU</p><h2 id="rules-title">Deviens maître<br><em>de chai.</em></h2>
+    <ol><li><strong>Compose ton vin</strong> en modifiant une ou plusieurs des 11 caractéristiques physico-chimiques.</li><li><strong>Lance la dégustation</strong> pour obtenir la prédiction du modèle de classification.</li><li><strong>Enchaîne 5 succès</strong> : il faut obtenir <b>bon_vin = 1</b> à chaque fois. Un seul échec remet ta série à zéro.</li></ol>
+    <p class="dialog-note">Le score est une estimation statistique, pas une garantie de qualité gustative. En mode découverte, les prédictions proviennent d'un modèle local distinct de l'endpoint Azure.</p>
+    <form method="dialog"><button class="primary-button dialog-cta" type="submit">À mes cuvées <span aria-hidden="true">↗</span></button></form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script>
+/* Modèle local de démonstration : différent de la version déployée sur Azure ML. */
+window.CUVEE_DATA = {"samples":[{"fixed acidity":9.1,"volatile acidity":0.3,"citric acid":0.41,"residual sugar":2.0,"chlorides":0.068,"free sulfur dioxide":10.0,"total sulfur dioxide":24.0,"density":0.99523,"pH":3.27,"sulphates":0.85,"alcohol":11.7},{"fixed acidity":8.0,"volatile acidity":0.59,"citric acid":0.16,"residual sugar":1.8,"chlorides":0.065,"free sulfur dioxide":3.0,"total sulfur dioxide":16.0,"density":0.9962,"pH":3.42,"sulphates":0.92,"alcohol":10.5},{"fixed acidity":6.9,"volatile acidity":0.36,"citric acid":0.25,"residual sugar":2.4,"chlorides":0.098,"free sulfur dioxide":5.0,"total sulfur dioxide":16.0,"density":0.9964,"pH":3.41,"sulphates":0.6,"alcohol":10.1},{"fixed acidity":10.2,"volatile acidity":0.44,"citric acid":0.58,"residual sugar":4.1,"chlorides":0.092,"free sulfur dioxide":11.0,"total sulfur dioxide":24.0,"density":0.99745,"pH":3.29,"sulphates":0.99,"alcohol":12.0},{"fixed acidity":10.2,"volatile acidity":0.49,"citric acid":0.63,"residual sugar":2.9,"chlorides":0.072,"free sulfur dioxide":10.0,"total sulfur dioxide":26.0,"density":0.9968,"pH":3.16,"sulphates":0.78,"alcohol":12.5},{"fixed acidity":6.8,"volatile acidity":0.6,"citric acid":0.18,"residual sugar":1.9,"chlorides":0.079,"free sulfur dioxide":18.0,"total sulfur dioxide":86.0,"density":0.9968,"pH":3.59,"sulphates":0.57,"alcohol":9.3},{"fixed acidity":10.4,"volatile acidity":0.55,"citric acid":0.23,"residual sugar":2.7,"chlorides":0.091,"free sulfur dioxide":18.0,"total sulfur dioxide":48.0,"density":0.9994,"pH":3.22,"sulphates":0.64,"alcohol":10.3},{"fixed acidity":8.9,"volatile acidity":0.48,"citric acid":0.53,"residual sugar":4.0,"chlorides":0.101,"free sulfur dioxide":3.0,"total sulfur dioxide":10.0,"density":0.99586,"pH":3.21,"sulphates":0.59,"alcohol":12.1},{"fixed acidity":6.3,"volatile acidity":0.39,"citric acid":0.16,"residual sugar":1.4,"chlorides":0.08,"free sulfur dioxide":11.0,"total sulfur dioxide":23.0,"density":0.9955,"pH":3.34,"sulphates":0.56,"alcohol":9.3},{"fixed acidity":6.4,"volatile acidity":0.865,"citric acid":0.03,"residual sugar":3.2,"chlorides":0.071,"free sulfur dioxide":27.0,"total sulfur dioxide":58.0,"density":0.995,"pH":3.61,"sulphates":0.49,"alcohol":12.7},{"fixed acidity":11.4,"volatile acidity":0.46,"citric acid":0.5,"residual sugar":2.7,"chlorides":0.122,"free sulfur dioxide":4.0,"total sulfur dioxide":17.0,"density":1.0006,"pH":3.13,"sulphates":0.7,"alcohol":10.2},{"fixed acidity":5.1,"volatile acidity":0.51,"citric acid":0.18,"residual sugar":2.1,"chlorides":0.042,"free sulfur dioxide":16.0,"total sulfur dioxide":101.0,"density":0.9924,"pH":3.46,"sulphates":0.87,"alcohol":12.9},{"fixed acidity":7.3,"volatile acidity":0.585,"citric acid":0.18,"residual sugar":2.4,"chlorides":0.078,"free sulfur dioxide":15.0,"total sulfur dioxide":60.0,"density":0.99638,"pH":3.31,"sulphates":0.54,"alcohol":9.8},{"fixed acidity":7.6,"volatile acidity":0.51,"citric acid":0.24,"residual sugar":2.4,"chlorides":0.091,"free sulfur dioxide":8.0,"total sulfur dioxide":38.0,"density":0.998,"pH":3.47,"sulphates":0.66,"alcohol":9.6},{"fixed acidity":8.8,"volatile acidity":0.31,"citric acid":0.4,"residual sugar":2.8,"chlorides":0.109,"free sulfur dioxide":7.0,"total sulfur dioxide":16.0,"density":0.99614,"pH":3.31,"sulphates":0.79,"alcohol":11.8},{"fixed acidity":10.8,"volatile acidity":0.32,"citric acid":0.44,"residual sugar":1.6,"chlorides":0.063,"free sulfur dioxide":16.0,"total sulfur dioxide":37.0,"density":0.9985,"pH":3.22,"sulphates":0.78,"alcohol":10.0},{"fixed acidity":7.7,"volatile acidity":0.965,"citric acid":0.1,"residual sugar":2.1,"chlorides":0.112,"free sulfur dioxide":11.0,"total sulfur dioxide":22.0,"density":0.9963,"pH":3.26,"sulphates":0.5,"alcohol":9.5},{"fixed acidity":7.4,"volatile acidity":0.36,"citric acid":0.3,"residual sugar":1.8,"chlorides":0.074,"free sulfur dioxide":17.0,"total sulfur dioxide":24.0,"density":0.99419,"pH":3.24,"sulphates":0.7,"alcohol":11.4},{"fixed acidity":8.7,"volatile acidity":0.48,"citric acid":0.3,"residual sugar":2.8,"chlorides":0.066,"free sulfur dioxide":10.0,"total sulfur dioxide":28.0,"density":0.9964,"pH":3.33,"sulphates":0.67,"alcohol":11.2},{"fixed acidity":6.6,"volatile acidity":0.58,"citric acid":0.02,"residual sugar":2.0,"chlorides":0.062,"free sulfur dioxide":37.0,"total sulfur dioxide":53.0,"density":0.99374,"pH":3.35,"sulphates":0.76,"alcohol":11.6},{"fixed acidity":9.0,"volatile acidity":0.785,"citric acid":0.24,"residual sugar":1.7,"chlorides":0.078,"free sulfur dioxide":10.0,"total sulfur dioxide":21.0,"density":0.99692,"pH":3.29,"sulphates":0.67,"alcohol":10.0},{"fixed acidity":10.3,"volatile acidity":0.32,"citric acid":0.45,"residual sugar":6.4,"chlorides":0.073,"free sulfur dioxide":5.0,"total sulfur dioxide":13.0,"density":0.9976,"pH":3.23,"sulphates":0.82,"alcohol":12.6},{"fixed acidity":10.4,"volatile acidity":0.38,"citric acid":0.46,"residual sugar":2.1,"chlorides":0.104,"free sulfur dioxide":6.0,"total sulfur dioxide":10.0,"density":0.99664,"pH":3.12,"sulphates":0.65,"alcohol":11.8},{"fixed acidity":7.2,"volatile acidity":0.6,"citric acid":0.04,"residual sugar":2.5,"chlorides":0.076,"free sulfur dioxide":18.0,"total sulfur dioxide":88.0,"density":0.99745,"pH":3.53,"sulphates":0.55,"alcohol":9.5}],"model":{"keys":["fixed acidity","volatile acidity","citric acid","residual sugar","chlorides","free sulfur dioxide","total sulfur dioxide","density","pH","sulphates","alcohol"],"means":[8.3555205047,0.5279600421,0.2765825447,2.5177707676,0.0882849632,16.1135646688,48.0094637224,0.9967578654,3.306424816,0.6569400631,10.3954959692],"scales":[1.7731045084,0.1811137772,0.193958686,1.3931934864,0.0493906909,10.6125600159,34.3570188965,0.001874872,0.1549832743,0.1757262101,1.0785158798],"coefs":[0.4405037985,-0.537649798,-0.022705998,0.1094355369,-0.5111603468,-0.0184009547,-0.2693544102,-0.2440032588,-0.1338826382,0.5772731655,1.1211833822],"intercept":-1.0563514238690552}};
+
+</script>
+<script>
+/* La Cuvée Parfaite — jeu front-end. Les clés Azure ne transitent jamais vers ce script. */
+(() => {
+  'use strict';
+
+  const GOAL = 5;
+  const DATA = window.CUVEE_DATA;
+  const SEEDS = DATA.samples;
+  const GROUPS = [
+    {
+      label: 'Structure & acidité', description: 'Ce qui façonne le caractère du vin.', icon: '◈', className: '',
+      features: [
+        ['fixed acidity', 'Acidité fixe', 'g/L', 4.6, 15.9, 0.1, 'Acides non volatils : la structure de base.'],
+        ['volatile acidity', 'Acidité volatile', 'g/L', 0.12, 1.58, 0.01, 'Une acidité excessive peut nuire à l’équilibre.'],
+        ['citric acid', 'Acide citrique', 'g/L', 0, 1, 0.01, 'Contribue à la sensation de fraîcheur.'],
+        ['pH', 'Potentiel hydrogène (pH)', '', 2.74, 4.01, 0.01, 'Plus le pH est bas, plus le vin est acide.']
+      ]
+    },
+    {
+      label: 'Corps & équilibre', description: 'La texture et la composition de la cuvée.', icon: '◉', className: 'green',
+      features: [
+        ['residual sugar', 'Sucre résiduel', 'g/L', 0.9, 15.5, 0.1, 'Sucres restant après la fermentation.'],
+        ['density', 'Densité', 'g/cm³', 0.99007, 1.00369, 0.00001, 'Mesure physique liée à la composition du vin.'],
+        ['alcohol', 'Alcool', '% vol.', 8.4, 14.9, 0.1, 'Teneur en alcool du vin rouge.'],
+        ['sulphates', 'Sulfates', 'g/L', 0.33, 2, 0.01, 'Composés liés à la stabilité du vin.']
+      ]
+    },
+    {
+      label: 'Stabilité & conservation', description: 'Les mesures qui aident à préserver le vin.', icon: '✦', className: 'gold',
+      features: [
+        ['chlorides', 'Chlorures', 'g/L', 0.012, 0.611, 0.001, 'Teneur en sels chlorures.'],
+        ['free sulfur dioxide', 'SO₂ libre', 'mg/L', 1, 72, 1, 'Soufre libre disponible pour la protection.'],
+        ['total sulfur dioxide', 'SO₂ total', 'mg/L', 6, 289, 1, 'Ensemble du dioxyde de soufre présent.']
+      ]
+    }
+  ];
+  const FEATURES = GROUPS.flatMap(g => g.features);
+  const $ = id => document.getElementById(id);
+  const el = {
+    features: $('feature-groups'), modeBadge: $('mode-badge'), modeLabel: $('mode-label'),
+    modeNote: $('demo-note'), modeNoteText: $('demo-note-text'),
+    draft: $('draft-status'), prediction: $('predict-button'), predictionLabel: $('predict-button-label'),
+    value: $('probability-value'), probLabel: $('probability-label'), wine: $('glass-wine'),
+    verdict: $('verdict-block'), verdictSymbol: $('verdict-symbol'), verdictTitle: $('verdict-title'), verdictText: $('verdict-text'),
+    progress: $('progress-circles'), progressLabel: $('progress-label'),
+    attempts: $('stat-attempts'), streak: $('stat-streak'), best: $('stat-best'),
+    history: $('history-items'), historyCount: $('history-count'), toast: $('toast')
+  };
+  const storageKey = 'cuvee-parfaite-record-v1';
+  let best = 0;
+  try { best = Math.max(0, Number(localStorage.getItem(storageKey)) || 0); } catch (_) { /* Navigation privée */ }
+  const state = {
+    mode: 'demo', values: { ...SEEDS[1] }, attempts: 0, streak: 0, best,
+    history: [], lastFingerprint: null, lastResult: null, activeRecipe: 0, busy: false
+  };
+  let toastTimer = null;
+
+  function decimals(step) {
+    const part = String(step).split('.')[1];
+    return part ? part.length : 0;
+  }
+  function fmt(value, step) { return Number(value).toFixed(decimals(step)); }
+  function clamp(value, min, max) { return Math.min(max, Math.max(min, value)); }
+  function percent(value, min, max) { return 100 * (value - min) / (max - min); }
+  function fingerprint() { return JSON.stringify(FEATURES.map(([key]) => state.values[key])); }
+
+  function renderFeatures() {
+    el.features.innerHTML = GROUPS.map(group => `
+      <section class="feature-group" aria-label="${group.label}">
+        <div class="feature-heading">
+          <div class="feature-title-group"><span class="group-icon ${group.className}" aria-hidden="true">${group.icon}</span><div><h3>${group.label}</h3><p>${group.description}</p></div></div>
+          <span class="group-count">${group.features.length} paramètres</span>
+        </div>
+        <div class="parameters-grid">${group.features.map(([key, title, unit, min, max, step, description]) => {
+          const i = FEATURES.findIndex(feature => feature[0] === key);
+          return `<div class="parameter" data-feature="${i}">
+            <div class="parameter-header">
+              <div><label for="range-${i}" class="parameter-name">${title}</label><span class="parameter-code">${key}</span></div>
+              <div class="parameter-entry"><input aria-label="Valeur : ${title}" type="number" id="number-${i}" min="${min}" max="${max}" step="${step}" value="${fmt(state.values[key], step)}" inputmode="decimal"><span class="parameter-unit">${unit}</span></div>
+            </div>
+            <input id="range-${i}" class="parameter-range" aria-label="Ajuster ${title}" type="range" min="${min}" max="${max}" step="${step}" value="${state.values[key]}">
+            <div class="parameter-bottom"><span>${fmt(min, step)}</span><span>${fmt(max, step)}</span></div>
+            <div class="parameter-description">${description}</div>
+          </div>`;
+        }).join('')}</div>
+      </section>`).join('');
+
+    FEATURES.forEach(([key, , , min, max, step], i) => {
+      const range = $(`range-${i}`);
+      const number = $(`number-${i}`);
+      const apply = raw => {
+        const parsed = Number(raw);
+        if (!Number.isFinite(parsed)) return;
+        const rounded = Number(clamp(parsed, min, max).toFixed(decimals(step)));
+        state.values[key] = rounded;
+        range.value = String(rounded);
+        number.value = fmt(rounded, step);
+        updateFill(range, rounded, min, max);
+        markChanged();
+      };
+      range.addEventListener('input', () => apply(range.value));
+      number.addEventListener('change', () => apply(number.value));
+      number.addEventListener('blur', () => { number.value = fmt(state.values[key], step); });
+      updateFill(range, state.values[key], min, max);
+    });
+  }
+  function updateFill(range, value, min, max) { range.style.setProperty('--fill', `${percent(value, min, max)}%`); }
+
+  function setProfile(profile, recipeIndex = -1) {
+    for (const [key, , , min, max, step] of FEATURES) {
+      const n = Number(profile[key]);
+      state.values[key] = Number(clamp(n, min, max).toFixed(decimals(step)));
+    }
+    FEATURES.forEach(([key, , , min, max, step], i) => {
+      $(`range-${i}`).value = String(state.values[key]);
+      $(`number-${i}`).value = fmt(state.values[key], step);
+      updateFill($(`range-${i}`), state.values[key], min, max);
+    });
+    markChanged();
+    state.activeRecipe = recipeIndex;
+    syncRecipes();
+  }
+
+  function syncRecipes() {
+    document.querySelectorAll('.recipe-button').forEach(button => {
+      const isSelected = Number(button.dataset.recipe) === state.activeRecipe;
+      button.classList.toggle('active', isSelected);
+      button.setAttribute('aria-pressed', String(isSelected));
+    });
+  }
+
+  function markChanged() {
+    state.activeRecipe = -1;
+    syncRecipes();
+    el.draft.textContent = state.lastFingerprint === null ? 'Prête à déguster' : 'Recette à tester';
+    el.draft.classList.toggle('changed', state.lastFingerprint !== null);
+    if (state.lastResult) {
+      state.lastResult = null;
+      renderVerdict(null);
+    }
+  }
+
+  function showToast(message, timeout = 3200) {
+    el.toast.textContent = message;
+    el.toast.classList.add('active');
+    if (toastTimer !== null) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.toast.classList.remove('active'), timeout);
+  }
+
+  function renderMode() {
+    const live = state.mode === 'azure';
+    el.modeBadge.classList.toggle('live', live);
+    el.modeBadge.classList.toggle('demo', !live);
+    el.modeLabel.textContent = live ? 'Azure ML connecté' : 'Mode découverte';
+    el.modeNote.classList.toggle('live-note', live);
+    el.modeNoteText.textContent = live
+      ? 'Mode connecté : chaque dégustation interroge réellement ton endpoint Azure ML via le serveur sécurisé.'
+      : 'Mode démonstration : un modèle local distinct simule les dégustations. Ajoute ta clé Azure au serveur pour utiliser ton vrai endpoint.';
+  }
+
+  async function detectMode() {
+    if (location.protocol === 'file:') { renderMode(); return; }
+    try {
+      const response = await fetch('/api/status', { signal: AbortSignal.timeout(4000) });
+      if (!response.ok) throw new Error('Statut indisponible');
+      const data = await response.json();
+      state.mode = data.mode === 'azure' ? 'azure' : 'demo';
+    } catch (_) { state.mode = 'demo'; }
+    renderMode();
+  }
+
+  function demoPredict(values) {
+    // Pipeline local pédagogique : StandardScaler + LogisticRegression, entraîné séparément sur le CSV fourni.
+    // L'endpoint Azure peut renvoyer d'autres résultats : ce mode est toujours signalé comme distinct.
+    const { keys, means, scales, coefs, intercept } = DATA.model;
+    let z = intercept;
+    keys.forEach((key, i) => { z += ((values[key] - means[i]) / scales[i]) * coefs[i]; });
+    const probability = 1 / (1 + Math.exp(-z));
+    return { prediction: probability >= 0.5 ? 1 : 0, probability, mode: 'demo' };
+  }
+
+  async function azurePredict(values) {
+    const response = await fetch('/api/predict', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: [values] }),
+      signal: AbortSignal.timeout(35000)
+    });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok || body.erreur) throw new Error(body.erreur || `Azure a répondu HTTP ${response.status}.`);
+    if (![0, 1].includes(Number(body.prediction))) throw new Error('Le modèle ne renvoie pas une classe binaire valide.');
+    return { prediction: Number(body.prediction), probability: typeof body.probability === 'number' ? body.probability : null, mode: 'azure' };
+  }
+
+  async function predict() {
+    if (state.busy) return;
+    const submitted = fingerprint();
+    if (state.lastFingerprint === submitted) {
+      showToast('Modifie au moins un paramètre pour présenter une nouvelle cuvée.');
+      return;
+    }
+    state.busy = true;
+    el.prediction.disabled = true;
+    el.prediction.classList.add('loading');
+    el.predictionLabel.textContent = 'Dégustation en cours…';
+    try {
+      const values = { ...state.values };
+      const result = state.mode === 'azure'
+        ? await azurePredict(values)
+        : await new Promise(resolve => setTimeout(() => resolve(demoPredict(values)), 530));
+      if (!Number.isFinite(result.probability)) result.probability = null;
+      const previousStreak = state.streak;
+      state.attempts += 1;
+      state.streak = result.prediction === 1 ? state.streak + 1 : 0;
+      state.best = Math.max(state.best, state.streak);
+      try { localStorage.setItem(storageKey, String(state.best)); } catch (_) { /* Pas de stockage : ce n'est pas bloquant. */ }
+      state.lastFingerprint = submitted;
+      state.lastResult = result;
+      state.history.unshift({ index: state.attempts, ...result });
+      if (state.history.length > 5) state.history.pop();
+      renderStats();
+      renderVerdict(result);
+      el.draft.textContent = 'Dégustation terminée';
+      el.draft.classList.remove('changed');
+      if (state.streak >= GOAL && previousStreak < GOAL) {
+        $('result-visual').classList.add('win-flash');
+        setTimeout(() => $('result-visual').classList.remove('win-flash'), 2300);
+        showToast('🏆 Grand cru légendaire ! 5 bonnes cuvées consécutives : défi réussi !', 6800);
+      } else if (result.prediction === 1) {
+        showToast(state.streak === 1 ? 'Premier grand cru ! Il en reste quatre.' : `Bravo ! ${state.streak} bons vins d’affilée.`);
+      } else {
+        showToast('Cuvée non validée : la série repart à zéro. Tu peux faire mieux !');
+      }
+    } catch (error) {
+      showToast(error.message || 'La dégustation n’a pas abouti.', 6800);
+      el.verdict.classList.remove('good', 'bad');
+      el.verdictTitle.textContent = 'Impossible de contacter le modèle';
+      el.verdictText.textContent = error.message || 'Vérifie le serveur et le déploiement Azure.';
+      el.verdictSymbol.textContent = '!';
+    } finally {
+      state.busy = false;
+      el.prediction.disabled = false;
+      el.prediction.classList.remove('loading');
+      el.predictionLabel.textContent = "Faire déguster à l'IA";
+    }
+  }
+
+  function renderStats() {
+    el.attempts.textContent = state.attempts;
+    el.streak.textContent = state.streak;
+    el.best.textContent = state.best;
+    el.progressLabel.textContent = `${Math.min(state.streak, GOAL)} / ${GOAL}`;
+    el.progress.innerHTML = Array.from({ length: GOAL }, (_, i) => {
+      const complete = i < state.streak;
+      const next = i === state.streak && state.streak < GOAL;
+      return `<div class="progress-step ${complete ? 'done' : ''} ${next ? 'next' : ''}" aria-label="Cuvée ${i + 1} ${complete ? 'validée' : 'à réaliser'}">${complete ? '✓' : i + 1}</div>`;
+    }).join('');
+    el.historyCount.textContent = `${state.attempts} vin${state.attempts > 1 ? 's' : ''}`;
+    if (state.history.length === 0) {
+      el.history.innerHTML = '<p class="empty-history">Les premières notes de dégustation apparaîtront ici.</p>';
+    } else {
+      el.history.innerHTML = state.history.map(item => `
+        <div class="history-item ${item.prediction === 1 ? 'good' : 'bad'}">
+          <span class="history-icon">${item.prediction === 1 ? '✓' : '×'}</span>
+          <span class="wine-name">Cuvée n°${item.index} · ${item.prediction === 1 ? 'Grand cru' : 'À retravailler'}</span>
+          <span class="wine-percent">${item.probability === null ? '—' : `${Math.round(item.probability * 100)} %`}</span>
+        </div>`).join('');
+    }
+  }
+
+  function renderVerdict(result) {
+    el.verdict.classList.remove('good', 'bad');
+    if (!result) {
+      el.value.textContent = '—';
+      el.probLabel.textContent = 'En attente';
+      el.wine.setAttribute('y', '90');
+      el.wine.setAttribute('height', '40');
+      el.verdictSymbol.textContent = '✧';
+      el.verdictTitle.textContent = 'Le jury attend ta cuvée';
+      el.verdictText.textContent = state.lastFingerprint === null
+        ? 'Ajuste les paramètres, puis lance ta première dégustation.'
+        : 'Recette modifiée. Lance une nouvelle dégustation pour obtenir un verdict.';
+      return;
+    }
+    const good = result.prediction === 1;
+    const probability = result.probability;
+    el.verdict.classList.add(good ? 'good' : 'bad');
+    el.verdictSymbol.textContent = good ? '✓' : '×';
+    el.verdictTitle.textContent = good
+      ? (state.streak >= GOAL ? 'Défi remporté : maître de chai !' : 'Grand cru validé !')
+      : 'Cette cuvée ne passe pas le jury';
+    el.verdictText.textContent = good
+      ? `${state.streak} réussite${state.streak > 1 ? 's' : ''} consécutive${state.streak > 1 ? 's' : ''}. Modifie ta recette pour en créer une autre.`
+      : 'Le modèle prédit une qualité inférieure à 7/10. La série retombe à zéro.';
+    el.value.textContent = probability === null ? '—' : `${Math.round(probability * 100)}%`;
+    el.probLabel.textContent = probability === null ? 'Probabilité indisponible' : 'Probabilité de bon vin';
+    if (probability !== null) {
+      const height = Math.round(5 + probability * 92);
+      const y = 119 - height;
+      el.wine.setAttribute('y', String(y));
+      el.wine.setAttribute('height', String(height));
+    }
+  }
+
+  function resetChallenge() {
+    state.attempts = 0;
+    state.streak = 0;
+    state.history = [];
+    state.lastResult = null;
+    state.lastFingerprint = null;
+    renderStats();
+    renderVerdict(null);
+    el.draft.textContent = 'Prête à déguster';
+    el.draft.classList.remove('changed');
+    showToast('Nouveau défi lancé. Ton meilleur record est conservé !');
+  }
+
+  function wireEvents() {
+    $('predict-button').addEventListener('click', predict);
+    $('reset-button').addEventListener('click', resetChallenge);
+    $('randomize-button').addEventListener('click', () => {
+      const current = fingerprint();
+      const candidates = SEEDS.filter(profile => JSON.stringify(FEATURES.map(([key]) => profile[key])) !== current);
+      const chosen = candidates[Math.floor(Math.random() * candidates.length)] || SEEDS[0];
+      setProfile(chosen);
+      showToast('Nouvelle cuvée chargée à partir d’une observation réelle.');
+    });
+    document.querySelectorAll('.recipe-button').forEach(button => {
+      button.addEventListener('click', () => {
+        const i = Number(button.dataset.recipe);
+        const indexes = [1, 2, 0];
+        setProfile(SEEDS[indexes[i]], i);
+      });
+    });
+    const dialog = $('rules-dialog');
+    $('rules-button').addEventListener('click', () => dialog.showModal());
+    dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+  }
+
+  renderFeatures();
+  syncRecipes();
+  renderStats();
+  renderVerdict(null);
+  wireEvents();
+  detectMode();
+})();
+
+</script>
+</body>
+</html>

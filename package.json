@@ -1,0 +1,12 @@
+{
+  "name": "la-cuvee-parfaite",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Défi œnologique et modèle Azure ML — site web sans dépendance",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": { "node": ">=18" },
+  "license": "UNLICENSED"
+}
